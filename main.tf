@@ -12,7 +12,7 @@ resource "local_file" "example_file2" {
 
 resource "null_resource" "create_dirs" {
   provisioner "local-exec" {
-    command = "mkdir -p ${path.module}/dir1 ${path.module}/dir2"
+    command = "mkdir dir1 && mkdir dir2"
   }
 }
 
