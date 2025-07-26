@@ -1,0 +1,74 @@
+pipeline {
+    agent { label 'linux_slave' }
+
+    tools {
+        terraform 'terraform'
+      git 'git'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Arshad2502/terraform_learn.git', branch: 'main'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                sh 'terraform validate'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply -auto-approve'
+            }
+        }
+
+        stage('Verify Files and Folders') {
+            steps {
+                sh '''
+                    if [ -e file1.txt ]; then
+                        echo "file1.txt exists"
+                    else
+                        echo "file1.txt missing"
+                        exit 1
+                    fi
+
+                    if [ -e file2.txt ]; then
+                        echo "file2.txt exists"
+                    else
+                        echo "file2.txt missing"
+                        exit 1
+                    fi
+
+                    if [ -d dir1 ]; then
+                        echo "dir1 exists"
+                    else
+                        echo "dir1 missing"
+                        exit 1
+                    fi
+
+                    if [ -d dir2 ]; then
+                        echo "dir2 exists"
+                    else
+                        echo "dir2 missing"
+                        exit 1
+                    fi
+                '''
+            }
+        }
+    }
+}
